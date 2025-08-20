@@ -1,0 +1,2 @@
+#"$(dirname "/bin/zsh")/_/husky.sh"
+npx lint-staged
