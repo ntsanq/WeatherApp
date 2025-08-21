@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { fetchUserCity, useCurrentWeather } from '@/features/weather/api';
+import { fetchUserCity, useCurrentWeatherResponse, useForecast } from '@/features/weather/api';
 import Loading from '@/components/common/Loading';
 import ErrorState from '@/components/common/ErrorFallBack';
+import CurrentWeatherResponseCard from '@/components/CurrentWeatherCard';
+import ForecastList from '@/components/ForecastList';
 
 export default function HomePage() {
   const [city, setCity] = useState<string | null>(null);
@@ -20,60 +22,21 @@ export default function HomePage() {
     }
   }, []);
 
-  const { data, isLoading, isError, error } = useCurrentWeather(city);
+  const cityOrDefault = city ?? 'singapore';
 
-  if (isLoading) return <Loading />;
-  if (isError) return <ErrorState message={error?.response?.data?.message || 'Failed'} />;
-  if (!data) return null;
+  const current = useCurrentWeatherResponse(cityOrDefault);
+  const forecast = useForecast(cityOrDefault);
 
-  const { name, weather, main, wind, visibility } = data;
-  const weatherInfo = weather[0];
-  const date = new Date().toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  if (current.isLoading || forecast.isLoading) return <Loading />;
+  if (current.isError || forecast.isError)
+    return <ErrorState message="Failed to load weather data" />;
 
-  const weatherDetails = [
-    { label: 'Humidity', value: `${main.humidity}%` },
-    {
-      label: 'Wind',
-      value: (
-        <>
-          <span style={{ transform: `rotate(${wind.deg}deg)` }} className="inline-block mr-2">
-            ➤
-          </span>
-          {wind.speed} m/s
-        </>
-      ),
-    },
-    { label: 'Visibility', value: `${visibility / 1000} km` },
-  ];
+  if (!current.data || !forecast.data) return null;
 
   return (
-    <div className="p-4 max-w-md mx-auto bg-white shadow rounded-md">
-      <h1 className="text-2xl font-bold mb-1 text-left">{name}</h1>
-      <p className="text-gray-500 mb-2 text-left">{date}</p>
-
-      <div className="flex items-center mb-4 justify-center">
-        <img
-          src={`https://openweathermap.org/img/wn/${weatherInfo.icon}@2x.png`}
-          alt={weatherInfo.description}
-        />
-        <div className="ml-4">
-          <p className="text-3xl font-bold">{Math.round(main.temp)}°C</p>
-          <p className="capitalize text-gray-600">{weatherInfo.description}</p>
-        </div>
-      </div>
-
-      <div className="px-5 flex justify-between text-gray-700 items-center">
-        {weatherDetails.map(({ label, value }) => (
-          <div key={label}>
-            <p>{label}</p>
-            <p className="font-bold">{value}</p>
-          </div>
-        ))}
-      </div>
+    <div className="p-4 max-w-2xl mx-auto">
+      <CurrentWeatherResponseCard data={current.data} />
+      <ForecastList data={forecast.data} />
     </div>
   );
 }
