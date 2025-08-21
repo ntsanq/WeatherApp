@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { http } from '@/libs/http';
+import { geoHttp, http } from '@/libs/http';
 import type { CurrentWeather, ForecastResponse } from './types';
 import { isAxiosError } from 'axios';
 
@@ -35,3 +35,11 @@ export const useForecast = (city: string) =>
     enabled: !!city,
     retry: smartRetry,
   });
+
+export async function fetchUserCity(lat: number, lon: number) {
+  const { data } = await geoHttp.get<{ name: string; country: string }[]>('/reverse', {
+    params: { lat, lon, limit: 1 },
+  });
+
+  return data?.[0]?.name ?? null;
+}

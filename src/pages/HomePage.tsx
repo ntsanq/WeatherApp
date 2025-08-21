@@ -1,16 +1,32 @@
-import { useCurrentWeather } from '@/features/weather/api';
+import { useState, useEffect } from 'react';
+import { fetchUserCity, useCurrentWeather } from '@/features/weather/api';
 import Loading from '@/components/common/Loading';
 import ErrorState from '@/components/common/ErrorFallBack';
 
 export default function HomePage() {
-  const { data, isLoading, isError, error } = useCurrentWeather('saigon');
+  const [city, setCity] = useState<string | null>(null);
+
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async ({ coords }) => {
+          const resolvedCity = await fetchUserCity(coords.latitude, coords.longitude);
+          if (resolvedCity) setCity(resolvedCity);
+        },
+        (err) => {
+          console.warn('User denied geolocation:', err);
+        }
+      );
+    }
+  }, []);
+
+  const { data, isLoading, isError, error } = useCurrentWeather(city);
 
   if (isLoading) return <Loading />;
   if (isError) return <ErrorState message={error?.response?.data?.message || 'Failed'} />;
   if (!data) return null;
 
   const { name, weather, main, wind, visibility } = data;
-  console.log(data);
   const weatherInfo = weather[0];
   const date = new Date().toLocaleDateString('en-US', {
     month: 'long',
@@ -27,7 +43,7 @@ export default function HomePage() {
           <span style={{ transform: `rotate(${wind.deg}deg)` }} className="inline-block mr-2">
             ➤
           </span>
-          {wind.speed} m/s{' '}
+          {wind.speed} m/s
         </>
       ),
     },
@@ -36,7 +52,7 @@ export default function HomePage() {
 
   return (
     <div className="p-4 max-w-md mx-auto bg-white shadow rounded-md">
-      <h1 className="text-2xl font-bold mb-1 text-left">{name.tt}</h1>
+      <h1 className="text-2xl font-bold mb-1 text-left">{name}</h1>
       <p className="text-gray-500 mb-2 text-left">{date}</p>
 
       <div className="flex items-center mb-4 justify-center">
