@@ -55,8 +55,7 @@ export default function SearchBar({
               onClick={() => handleSelect(c)}
               className="p-2 hover:bg-gray-300 cursor-pointer"
             >
-              {c.name}, {c.state ? c.state + ', ' : ''}
-              {c.country}
+              {`${c.name}${c.state ? `, ${c.state}` : ''}, ${c.country} [${c.lat?.toFixed(3)},${c.lon?.toFixed(3)}]`}
             </li>
           ))}
         </ul>

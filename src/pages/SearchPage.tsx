@@ -24,14 +24,10 @@ export default function SearchPage() {
   };
 
   const handleSelect = (city: GeoCity) => {
-    const cityName = `${city.name}, ${city.state ?? ''}, ${city.country}`;
+    const cityName = `${city.name}${city.state ? `, ${city.state}` : ''}, ${city.country} [${city.lat?.toFixed(3)},${city.lon?.toFixed(3)}]`;
     addCity(cityName);
 
-    let url = `/?city=${encodeURIComponent(city.name)}`;
-    if (city.state) url += `&state=${encodeURIComponent(city.state)}`;
-    if (city.country) url += `&country=${encodeURIComponent(city.country)}`;
-
-    navigate(url);
+    navigate(`/?lat=${city.lat}&lon=${city.lon}`);
   };
 
   return (

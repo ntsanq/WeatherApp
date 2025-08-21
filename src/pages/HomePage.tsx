@@ -9,9 +9,13 @@ import Layout from '../components/Layout';
 
 export default function HomePage() {
   const [searchParams] = useSearchParams();
-  const city = searchParams.get('city') || 'singapore';
-  const current = useCurrentWeather(city);
-  const forecast = useForecast(city);
+  const latStr = searchParams.get('lat');
+  const lonStr = searchParams.get('lon');
+  const lat = latStr ? Number(latStr) : 1.3521; // Singapore latitude as default
+  const lon = lonStr ? Number(lonStr) : 103.8198; // Singapore longitude as default
+
+  const current = useCurrentWeather(lat, lon);
+  const forecast = useForecast(lat, lon);
 
   if (current.isLoading || forecast.isLoading) return <Loading />;
   if (current.isError || forecast.isError)

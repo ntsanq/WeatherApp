@@ -15,29 +15,35 @@ const smartRetry = (failureCount: number, error: { response: { status: number } 
   return failureCount < 3;
 };
 
-export const useCurrentWeather = (city: string) =>
+export const useCurrentWeather = (lat: number, lon: number) =>
   useQuery({
-    queryKey: ['current-weather', city],
+    queryKey: ['current-weather', lat, lon],
     queryFn: async (): Promise<CurrentWeatherResponse> => {
       const { data } = await http.get<CurrentWeatherResponse>('/weather', {
-        params: { q: city },
+        params: {
+          lat: lat,
+          lon: lon,
+        },
       });
       return data;
     },
-    enabled: !!city,
+    enabled: !!lat && !!lon,
     retry: smartRetry,
   });
 
-export const useForecast = (city: string) =>
+export const useForecast = (lat: number, lon: number) =>
   useQuery({
-    queryKey: ['forecast', city],
+    queryKey: ['forecast', lat, lon],
     queryFn: async (): Promise<ForecastResponse> => {
       const { data } = await http.get<ForecastResponse>('/forecast', {
-        params: { q: city },
+        params: {
+          lat: lat,
+          lon: lon,
+        },
       });
       return data;
     },
-    enabled: !!city,
+    enabled: !!lat && !!lon,
     retry: smartRetry,
   });
 

@@ -10,7 +10,7 @@ export function Header() {
         async ({ coords }) => {
           const resolvedCity = await fetchUserCity(coords.latitude, coords.longitude);
           if (resolvedCity) {
-            navigate(`/?city=${encodeURIComponent(resolvedCity)}`);
+            navigate(`/?lat=${coords.latitude}&lon=${coords.longitude}`);
           }
         },
         (err) => {
