@@ -1,6 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { geoHttp, http } from '@/libs/http';
-import type { CurrentWeatherResponse, ForecastResponse } from './types';
+import type {
+  CurrentWeatherResponse,
+  FetchUserCityResponse,
+  ForecastResponse,
+  GeoCity,
+} from './types';
 import { isAxiosError } from 'axios';
 
 const smartRetry = (failureCount: number, error: { response: { status: number } }) => {
@@ -10,7 +15,7 @@ const smartRetry = (failureCount: number, error: { response: { status: number } 
   return failureCount < 3;
 };
 
-export const useCurrentWeatherResponse = (city: string) =>
+export const useCurrentWeather = (city: string) =>
   useQuery({
     queryKey: ['current-weather', city],
     queryFn: async (): Promise<CurrentWeatherResponse> => {
@@ -37,9 +42,17 @@ export const useForecast = (city: string) =>
   });
 
 export async function fetchUserCity(lat: number, lon: number) {
-  const { data } = await geoHttp.get<{ name: string; country: string }[]>('/reverse', {
+  const { data } = await geoHttp.get<FetchUserCityResponse[]>('/reverse', {
     params: { lat, lon, limit: 1 },
   });
 
   return data?.[0]?.name ?? null;
+}
+
+export async function searchCities(query: string, limit = 10): Promise<GeoCity[]> {
+  if (!query) return [];
+  const { data } = await geoHttp.get<GeoCity[]>('/direct', {
+    params: { q: query, limit },
+  });
+  return data;
 }

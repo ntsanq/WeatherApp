@@ -86,3 +86,24 @@ export interface ForecastItem {
   sys: { pod: string };
   dt_txt: string;
 }
+
+export interface GeoCity {
+  name: string;
+  lat?: number;
+  lon?: number;
+  country?: string;
+  state?: string;
+}
+
+export interface LocalNames {
+  [key: string]: string;
+}
+
+export interface FetchUserCityResponse {
+  name: string;
+  local_names: LocalNames;
+  lat: number;
+  lon: number;
+  country: string;
+  state?: string;
+}
