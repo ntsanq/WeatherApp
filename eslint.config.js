@@ -18,6 +18,14 @@ export default defineConfig([
     rules: {
       'prettier/prettier': 'error',
     },
+    settings: {
+      'import/resolver': {
+        alias: {
+          map: [['@', './src']],
+          extensions: ['.ts', '.js', '.jsx', '.tsx'],
+        },
+      },
+    },
   },
   tseslint.configs.recommended,
   prettier,

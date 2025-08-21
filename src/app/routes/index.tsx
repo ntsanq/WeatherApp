@@ -7,17 +7,12 @@ import NotFoundPage from '../../pages/NotFoundPage.tsx';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
-    errorElement: <ErrorFallback />,
-  },
-  {
-    path: '/forecast',
-    element: <ForecastPage />,
-    errorElement: <ErrorFallback />,
-  },
-  {
-    path: '*',
-    element: <NotFoundPage />, // catch-all route
+    errorElement: <ErrorFallback message="Something went wrong. Please reload the page!" />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: 'forecast', element: <ForecastPage /> },
+      { path: '*', element: <NotFoundPage /> },
+    ],
   },
 ]);
 
