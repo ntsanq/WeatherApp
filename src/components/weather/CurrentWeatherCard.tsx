@@ -12,7 +12,7 @@ export default function CurrentWeatherResponseCard({ data }: Props) {
   });
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-2xl mb-6">
+    <div className="p-4 bg-gray-100 rounded-lg shadow-2xl mb-6">
       <h1 className="text-xl font-bold text-center">{name}</h1>
       <p className="text-gray-500 text-center">{date}</p>
 
@@ -34,7 +34,10 @@ export default function CurrentWeatherResponseCard({ data }: Props) {
         </div>
         <div>
           <p>Winds</p>
-          <p className="font-bold">{wind.speed} m/s</p>
+          <span style={{ transform: `rotate(${wind.deg}deg)` }} className="inline-block mr-2">
+            ➤
+          </span>
+          <span className="font-bold">{wind.speed} m/s</span>
         </div>
         <div>
           <p>Visibility</p>

@@ -5,6 +5,7 @@ import { useSearchHistory } from '@/features/weather/hooks/useSearchHistory';
 import type { GeoCity } from '@/features/weather/types';
 import SearchHistory from '@/components/weather/SearchHistory';
 import SearchBar from '@/components/weather/SearchBar';
+import Layout from '@/components/Layout';
 
 export default function SearchPage() {
   const [input, setInput] = useState('');
@@ -34,19 +35,19 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <SearchBar
-        input={input}
-        setInput={setInput}
-        handleSearch={handleSearch}
-        results={results}
-        isFetching={isFetching}
-        errorCity={errorCity}
-        handleSelect={handleSelect}
-      />
-
-      <h3 className="mt-6 font-bold">History</h3>
-      <SearchHistory history={history} removeCity={removeCity} navigate={navigate} />
-    </div>
+    <Layout title="Search & history">
+      <div className="p-4 max-w-2xl mx-auto">
+        <SearchBar
+          input={input}
+          setInput={setInput}
+          handleSearch={handleSearch}
+          results={results}
+          isFetching={isFetching}
+          errorCity={errorCity}
+          handleSelect={handleSelect}
+        />
+        <SearchHistory history={history} removeCity={removeCity} navigate={navigate} />
+      </div>
+    </Layout>
   );
 }

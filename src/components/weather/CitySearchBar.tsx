@@ -22,9 +22,9 @@ export default function CitySearchBar({ onSelect }: Props) {
         placeholder="Search city..."
         className="border p-2 w-full rounded"
       />
-      {isLoading && <p className="absolute bg-white p-2">Loading...</p>}
+      {isLoading && <p className="absolute bg-gray-100 p-2">Loading...</p>}
       {suggestions && suggestions.length > 0 && (
-        <ul className="absolute bg-white border w-full mt-1 rounded shadow">
+        <ul className="absolute bg-gray-100 border w-full mt-1 rounded shadow">
           {suggestions.map((city) => (
             <li
               key={`${city.name}-${city.lat}-${city.lon}`}

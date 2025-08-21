@@ -23,11 +23,14 @@ export function Header() {
   };
 
   return (
-    <div className="flex justify-between items-center">
-      <button onClick={handleLocate} className="p-2">
-        📍
+    <div className="flex justify-between items-center mb-4">
+      <button
+        onClick={handleLocate}
+        className="p-2 text-gray-100 font-bold border shadow-xl rounded-lg"
+      >
+        📍 My location
       </button>
-      <button onClick={() => navigate('/search')} className="p-2">
+      <button onClick={() => navigate('/search')} className="p-2  border rounded-lg shadow-xl">
         🔍
       </button>
     </div>

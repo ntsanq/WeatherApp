@@ -13,7 +13,7 @@ export default function ForecastList({ data }: Props) {
   const todayStr = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-2xl">
+    <div className="p-4 bg-gray-100 rounded-lg shadow-2xl">
       <h2 className="text-lg font-bold mb-2">5-day Forecast (3 Hours)</h2>
 
       {Object.entries(grouped).map(([date, entries]) => {
