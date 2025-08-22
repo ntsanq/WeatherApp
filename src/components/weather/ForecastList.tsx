@@ -43,7 +43,7 @@ export default function ForecastList({ data }: Props) {
                     <img
                       src={`https://openweathermap.org/img/wn/${item.weather[0].icon}.png`}
                       alt={item.weather[0].description}
-                      className="w-10 h-10"
+                      className="w-10 h-10 drop-shadow-[5px_5px_10px_rgba(0,0,0,0.5)]"
                     />
                     <span className="w-20 text-center">
                       {Math.round(item.main.temp_min)}° / {Math.round(item.main.temp_max)}°

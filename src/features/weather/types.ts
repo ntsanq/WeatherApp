@@ -107,3 +107,9 @@ export interface FetchUserCityResponse {
   country: string;
   state?: string;
 }
+
+export interface CityHistoryItem {
+  name: string;
+  lat: number;
+  lon: number;
+}

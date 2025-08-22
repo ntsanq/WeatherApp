@@ -1,17 +1,14 @@
+import type { CityHistoryItem } from '@/features/weather/types';
+
 type SearchHistoryProps = {
-  history: string[];
-  removeCity: (city: string) => void;
+  history: CityHistoryItem[];
+  removeCity: (city: CityHistoryItem) => void;
   navigate: (to: string) => void;
 };
 
 export default function SearchHistory({ history, removeCity, navigate }: SearchHistoryProps) {
-  const handleHistoryClick = (city: string) => {
-    const parts = city.split(',').map((p) => p.trim());
-    let url = `/?city=${encodeURIComponent(parts[0])}`;
-    if (parts[1]) url += `&state=${encodeURIComponent(parts[1])}`;
-    if (parts[2]) url += `&country=${encodeURIComponent(parts[2])}`;
-
-    navigate(url);
+  const handleHistoryClick = (city: CityHistoryItem) => {
+    navigate(`/?lat=${city.lat}&lon=${city.lon}`);
   };
 
   return (
@@ -21,9 +18,13 @@ export default function SearchHistory({ history, removeCity, navigate }: SearchH
         {history.length > 0 ? (
           <ul className="divide-y">
             {history.map((c) => (
-              <li key={c} className="flex justify-between items-center py-3 hover:font-bold">
-                <button onClick={() => handleHistoryClick(c)} className="">
-                  {c}
+              <li
+                key={`${c.name}-${c.lat}-${c.lon}`}
+                className="flex justify-between items-center py-3 hover:font-bold"
+              >
+                <button onClick={() => handleHistoryClick(c)}>
+                  {c.name} [{c.lat != null ? c.lat.toFixed(4) : 'N/A'},
+                  {c.lon != null ? c.lon.toFixed(4) : 'N/A'}]
                 </button>
                 <button onClick={() => removeCity(c)} className="text-red-500">
                   ✕

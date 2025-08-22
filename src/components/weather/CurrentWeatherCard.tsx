@@ -2,8 +2,8 @@ import type { CurrentWeatherResponse } from '@/features/weather/types';
 
 type Props = { data: CurrentWeatherResponse };
 
-export default function CurrentWeatherResponseCard({ data }: Props) {
-  const { name, weather, main, wind, visibility } = data;
+export default function CurrentWeatherCard({ data }: Props) {
+  const { name, weather, main, wind, visibility, sys } = data;
   const weatherInfo = weather[0];
   const date = new Date().toLocaleDateString('en-US', {
     month: 'long',
@@ -13,11 +13,14 @@ export default function CurrentWeatherResponseCard({ data }: Props) {
 
   return (
     <div className="p-4 bg-gray-100 rounded-lg shadow-2xl mb-6">
-      <h1 className="text-xl font-bold text-center">{name}</h1>
+      <h1 className="text-xl font-bold text-center">
+        {name}, {sys.country}
+      </h1>
       <p className="text-gray-500 text-center">{date}</p>
 
       <div className="flex justify-center items-center my-4">
         <img
+          className="drop-shadow-[5px_5px_10px_rgba(0,0,0,0.5)]"
           src={`https://openweathermap.org/img/wn/${weatherInfo.icon}@2x.png`}
           alt={weatherInfo.description}
         />

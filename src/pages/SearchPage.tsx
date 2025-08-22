@@ -6,6 +6,7 @@ import type { GeoCity } from '@/features/weather/types';
 import SearchHistory from '@/components/weather/SearchHistory';
 import SearchBar from '@/components/weather/SearchBar';
 import Layout from '@/components/Layout';
+import type { CityHistoryItem } from '@/features/weather/types';
 
 export default function SearchPage() {
   const [input, setInput] = useState('');
@@ -24,14 +25,26 @@ export default function SearchPage() {
   };
 
   const handleSelect = (city: GeoCity) => {
-    const cityName = `${city.name}${city.state ? `, ${city.state}` : ''}, ${city.country} [${city.lat?.toFixed(3)},${city.lon?.toFixed(3)}]`;
-    addCity(cityName);
+    if (city.lat == null || city.lon == null) {
+      throw new Error('Selected city has no coordinates');
+    }
 
+    const item: CityHistoryItem = {
+      name: city.name,
+      lat: city.lat,
+      lon: city.lon,
+    };
+
+    addCity(item);
     navigate(`/?lat=${city.lat}&lon=${city.lon}`);
   };
 
+  const handleRemove = (city: CityHistoryItem) => {
+    removeCity(city);
+  };
+
   return (
-    <Layout title="Search & history">
+    <Layout title="Search & History">
       <div className="p-4 max-w-2xl mx-auto">
         <SearchBar
           input={input}
@@ -42,7 +55,7 @@ export default function SearchPage() {
           errorCity={errorCity}
           handleSelect={handleSelect}
         />
-        <SearchHistory history={history} removeCity={removeCity} navigate={navigate} />
+        <SearchHistory history={history} removeCity={handleRemove} navigate={navigate} />
       </div>
     </Layout>
   );
