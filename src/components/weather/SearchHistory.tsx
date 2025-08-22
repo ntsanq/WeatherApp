@@ -23,7 +23,7 @@ export default function SearchHistory({ history, removeCity, navigate }: SearchH
                 className="flex justify-between items-center py-3 hover:font-bold"
               >
                 <button onClick={() => handleHistoryClick(c)}>
-                  {c.name} [{c.lat != null ? c.lat.toFixed(4) : 'N/A'},
+                  {c.name}, {c.country} [{c.lat != null ? c.lat.toFixed(4) : 'N/A'},
                   {c.lon != null ? c.lon.toFixed(4) : 'N/A'}]
                 </button>
                 <button onClick={() => removeCity(c)} className="text-red-500">

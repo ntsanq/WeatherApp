@@ -33,6 +33,7 @@ export default function SearchPage() {
       name: city.name,
       lat: city.lat,
       lon: city.lon,
+      country: city.country || '',
     };
 
     addCity(item);
